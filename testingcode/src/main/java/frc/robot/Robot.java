@@ -4,12 +4,16 @@
 
 package frc.robot;
 
+import javax.sound.sampled.SourceDataLine;
+
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,12 +22,13 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
  * directory.
  */
 public class Robot extends TimedRobot {
-  private final PWMSparkMax m_leftDrive = new PWMSparkMax(0);
-  private final PWMSparkMax m_rightDrive = new PWMSparkMax(1);
+  private final CANSparkMax m_leftDrive = new CANSparkMax(0);
+  private final CANSparkMax m_rightDrive = new CANSparkMax(1);
   private final DifferentialDrive m_robotDrive =
       new DifferentialDrive(m_leftDrive::set, m_rightDrive::set);
   private final XboxController m_controller = new XboxController(0);
   private final Timer m_timer = new Timer();
+
 
   public Robot() {
     SendableRegistry.addChild(m_robotDrive, m_leftDrive);
@@ -68,6 +73,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_robotDrive.arcadeDrive(-m_controller.getLeftY(), -m_controller.getRightX());
+    System.out.println("From left y" + m_controller.getLeftY());
+    
+    System.out.println(m_controller.getRightX());
   }
 
   /** This function is called once each time the robot enters test mode. */
